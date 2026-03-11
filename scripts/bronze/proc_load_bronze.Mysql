@@ -1,18 +1,67 @@
 /*
 ===============================================================================
-Stored Procedure: Load Bronze Layer (Source -> Bronze)
+Load Bronze Layer (Source -> Bronze)
 ===============================================================================
 Script Purpose:
-    This stored procedure loads data into the 'bronze' schema from external CSV files. 
-    It performs the following actions:
-    - Truncates the bronze tables before loading data.
-    - Uses the `BULK INSERT` command to load data from csv Files to bronze tables.
+     loads data into the 'bronze' schema from external CSV files. 
+     It performs the following actions:
 
-Parameters:
-    None. 
-	  This stored procedure does not accept any parameters or return any values.
+    - Uses the `load data local infile' command to load data from csv Files to bronze tables.
 
-Usage Example:
-    EXEC bronze.load_bronze;
 ===============================================================================
 */
+
+
+ SHOW GLOBAL VARIABLES LIKE 'local_infile';
+ SET GLOBAL local_infile = 1;
+load data local infile '/Users/karishma/Desktop/Data_Analysist_Projects/sql-data-warehouse-project/datasets/source_crm/cust_info.csv'
+into table bronze_crm_cust_info
+ fields terminated by ','
+ ignore 1 rows;
+ 
+ SHOW GLOBAL VARIABLES LIKE 'local_infile';
+SET GLOBAL local_infile = 1;
+USE datawarehouse;
+LOAD DATA LOCAL INFILE '/Users/karishma/Desktop/Data_Analysist_Projects/sql-data-warehouse-project/datasets/source_crm/cust_info.csv'
+INTO TABLE bronze_crm_cust_info
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+ 
+ select * from bronze_crm_prd_info;
+ SET GLOBAL local_infile = 1;
+USE datawarehouse;
+LOAD DATA LOCAL INFILE '/Users/karishma/Desktop/Data_Analysist_Projects/sql-data-warehouse-project/datasets/source_crm/prd_info.csv'
+INTO TABLE bronze_crm_prd_info
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+ 
+select * from bronze_crm_sales_details;
+ SET GLOBAL local_infile = 1;
+USE datawarehouse;
+LOAD DATA LOCAL INFILE '/Users/karishma/Desktop/Data_Analysist_Projects/sql-data-warehouse-project/datasets/source_crm/sales_details.csv'
+INTO TABLE bronze_crm_sales_details
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+ 
+LOAD DATA LOCAL INFILE '/Users/karishma/Desktop/Data_Analysist_Projects/sql-data-warehouse-project/datasets/source_erp/CUST_AZ12.csv'
+INTO TABLE bronze_erp_cust_az12
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE '/Users/karishma/Desktop/Data_Analysist_Projects/sql-data-warehouse-project/datasets/source_erp/LOC_A101.csv'
+INTO TABLE bronze_erp_loc_a101
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE '/Users/karishma/Desktop/Data_Analysist_Projects/sql-data-warehouse-project/datasets/source_erp/PX_CAT_G1V2.csv'
+INTO TABLE bronze_erp_px_cat_g1v2
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+
